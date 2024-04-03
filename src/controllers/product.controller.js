@@ -8,7 +8,7 @@ export default class ProductController {
   }
 
   getAddForm(req, res) {
-    return res.render("new-product",{errorMessage:null});
+    return res.render("new-product", { errorMessage: null });
   }
 
   addNewproduct(req, res) {
@@ -17,15 +17,24 @@ export default class ProductController {
     return res.render("products", { products });
   }
 
-  getUpdateProductView(req,res,next){
-    const {id} = req.body;
+  getUpdateProductView(req, res, next) {
+    const id = req.params.id;
 
     const productFound = ProductModel.getById(id);
 
-    if(productFound){
-        res.render('update-product');
-    }else{
-        res.status(401).send('product not found')
+    if (productFound) {
+      res.render("update-product", {
+        product: productFound,
+        errorMessage: null,
+      });
+    } else {
+      res.status(401).send("product not found");
     }
+  }
+
+  postUpdateView(req,res){
+    ProductModel.update(req.body);
+    let products = ProductModel.get();
+    return res.render("products", { products });
   }
 }

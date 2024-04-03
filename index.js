@@ -18,8 +18,10 @@ server.use(ejsLayouts);
 // create an instance of ProductController
 const productController = new ProductController(); 
 server.get('/', (productController.getProducts));
-server.get('/new', productController.getAddForm);
+server.get('/add-product', productController.getAddForm);
+server.get('/update-product/:id', productController.getUpdateProductView)
 server.post('/', validationMiddleware,productController.addNewproduct)
+server.post('/update-product', productController.postUpdateView)
 server.use(express.static('src/views'));
     // return res.send('Welcome to Inventory App');
 server.listen(3400);
