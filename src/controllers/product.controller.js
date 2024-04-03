@@ -8,32 +8,24 @@ export default class ProductController {
   }
 
   getAddForm(req, res) {
-    return res.render("new-product",{errorMessaeg:null});
+    return res.render("new-product",{errorMessage:null});
   }
 
   addNewproduct(req, res) {
-    // validating data
-    const { name, price, imageUrl } = req.body;
-    let error=[];
-    if (!name || name.trim() == "") {
-      error.push("Name is required");
-    }
-
-    if (!price || parseFloat(price) < 1) {
-      error.push("Price must be a positive");
-    }
-
-    try {
-      const validUrl = new URL(imageUrl);
-    } catch (err) {
-      error.push("URL is Invalid");
-    }
-
-    if (error.length > 0) {
-      return res.render("new-product", { errorMessaeg: error[0] });
-    }
     ProductModel.add(req.body);
     let products = ProductModel.get();
     return res.render("products", { products });
+  }
+
+  getUpdateProductView(req,res,next){
+    const {id} = req.body;
+
+    const productFound = ProductModel.getById(id);
+
+    if(productFound){
+        res.render('update-product');
+    }else{
+        res.status(401).send('product not found')
+    }
   }
 }
