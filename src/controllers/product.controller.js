@@ -32,9 +32,21 @@ export default class ProductController {
     }
   }
 
-  postUpdateView(req,res){
+  postUpdateView(req, res) {
     ProductModel.update(req.body);
     let products = ProductModel.get();
     return res.render("products", { products });
+  }
+  deleteProduct(req,res){
+    const id = req.params.id;
+    const productFound = ProductModel.getById(id);
+    if(!productFound){
+      return res.status(401).send("product not found");
+    }
+    console.log("Confirmation delete id",id)
+    ProductModel.delete(id);
+    var products = ProductModel.get()
+    res.render('products',{products})
+
   }
 }
