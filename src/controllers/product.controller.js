@@ -11,10 +11,13 @@ export default class ProductController {
     return res.render("new-product", { errorMessage: null });
   }
 
-  addNewproduct(req, res) {
-    ProductModel.add(req.body);
-    let products = ProductModel.get();
-    return res.render("products", { products });
+  addNewproduct(req, res,next) {
+    const { name, desc, price } = req.body;
+    const imageUrl =
+      'images/' + req.file.filename;
+    ProductModel.add(name, desc, price, imageUrl);
+    var products = ProductModel.get();
+    res.render('products', { products });
   }
 
   getUpdateProductView(req, res, next) {

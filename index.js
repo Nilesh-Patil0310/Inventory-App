@@ -3,6 +3,7 @@ import ProductController from "./src/controllers/product.controller.js";
 import path from "path";
 import ejsLayouts from "express-ejs-layouts";
 import validationMiddleware from "./src/middlewares/validation.middlewares.js";
+import { fileUplod } from "./src/middlewares/multer.middleware.js";
 // const express = require('express');
 
 const server = express();
@@ -34,7 +35,12 @@ server.get("/update-product/:id", productController.getUpdateProductView);
 server.post('/delete-product/:id', productController.deleteProduct)
 
 // post the form data into products and display on UI
-server.post("/add-product", validationMiddleware, productController.addNewproduct);
+server.post(
+    '/add-product',
+    fileUplod.single('imageUrl'),
+    validationMiddleware,
+    productController.addNewproduct
+  );
 
 // post the updated data
 server.post("/update-product", productController.postUpdateView);

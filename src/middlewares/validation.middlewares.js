@@ -8,7 +8,12 @@ const validationMiddleware = async (req, res, next) => {
     body("price")
       .isFloat({ gt: 0 })
       .withMessage("Price should be positive number"),
-    body("imageUrl").isURL().withMessage("Invalid url"),
+    body("imageUrl").custom((value, {req})=>{
+       if(!req.file){
+        throw new Error('Image is required')
+       }
+       return true
+    })
   ];
 
   //   Run those rules
