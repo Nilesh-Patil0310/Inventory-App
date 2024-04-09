@@ -4,6 +4,7 @@ import path from "path";
 import ejsLayouts from "express-ejs-layouts";
 import validationMiddleware from "./src/middlewares/validation.middlewares.js";
 import { fileUplod } from "./src/middlewares/multer.middleware.js";
+import UserController from "./src/controllers/user.controller.js";
 // const express = require('express');
 
 const server = express();
@@ -22,8 +23,23 @@ server.use(express.json());
 // create an instance of ProductController
 const productController = new ProductController();
 
+// create an instace of Usercontroller
+const userController = new UserController();
+
+
 // get details of all products
 server.get("/", productController.getProducts);
+
+// get user resister page
+server.get('/register', userController.getRegister);
+
+// get user login page
+server.get('/login', userController.getLogin);
+
+// post login credentials
+server.post('/login',userController.postLogin);
+
+server.post('/register', userController.postRegister);
 
 // form render to add the new Product
 server.get("/add-product", productController.getAddForm);
