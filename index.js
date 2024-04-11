@@ -7,10 +7,15 @@ import { fileUplod } from "./src/middlewares/multer.middleware.js";
 import UserController from "./src/controllers/user.controller.js";
 import session from "express-session";
 import { auth } from "./src/middlewares/auth.middleware.js";
+import cookieParser from "cookie-parser";
+import { setLastvisit } from "./src/middlewares/lastvisit.middlware.js";
 // const express = require('express');
 
 const server = express();
+server.use(express.static('public'))
 
+server.use(cookieParser());
+// server.use(setLastvisit);
 server.use(session({
   secret:'SecretKey',
   resave: false,
@@ -18,7 +23,7 @@ server.use(session({
   cookie:{secure:false},
 }));
 
-server.use(express.static('public'))
+
 
 server.use(express.urlencoded({ extended: true }));
 // setup view engine settings
@@ -37,7 +42,7 @@ const userController = new UserController();
 
 
 // get details of all products
-server.get("/",auth,productController.getProducts);
+server.get("/",setLastvisit,auth,productController.getProducts);
 
 // get user resister page
 server.get('/register', userController.getRegister);
